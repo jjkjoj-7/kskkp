@@ -339,6 +339,53 @@ header {
         overflow-x: auto; 
     }
 }
+
+.nav-links {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.nav-btn {
+    background: #2a2a35; 
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s ease;
+    border: 1px solid #3f3f4d;
+}
+
+
+.res-btn:hover {
+    background: #00b894;
+    border-color: #00b894;
+    box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+    transform: translateY(-2px);
+}
+
+
+.scan-btn:hover {
+    background: #0984e3;
+    border-color: #0984e3;
+    box-shadow: 0 4px 15px rgba(9, 132, 227, 0.3);
+    transform: translateY(-2px);
+}
+
+.nav-btn i {
+    font-size: 18px;
+}
+
+@media (max-width: 600px) {
+    .nav-links {
+        justify-content: center;
+    }
+}
     </style>
 </head>
 <body>
@@ -348,7 +395,17 @@ header {
 </header>
 
     <h2>Reservation Control Panel</h2>
+<div class="nav-links">
+    <a href="https://thebookedsystem.com/reserve.html" target="_blank" class="nav-btn res-btn">
+        <span>New Reservation</span>
+        <i class="fas fa-plus-circle"></i> 
+    </a>
 
+    <a href="https://thebookedsystem.com/scanqr.html" target="_blank" class="nav-btn scan-btn">
+        <span>Scan QR Code</span>
+        <i class="fas fa-qrcode"></i> 
+    </a>
+</div>
     
     <div class="search-area">
         <input type="date" id="sDate">
