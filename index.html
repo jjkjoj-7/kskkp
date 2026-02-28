@@ -2047,6 +2047,94 @@ window.checkAvailability = async function () {
     }
 };
 
+  function getKeyInfo(e){
+    return {
+      key: (e.key || '').toLowerCase(),
+      code: (e.code || '').toLowerCase(),
+      keyCode: e.keyCode || e.which || 0,
+      ctrl: e.ctrlKey || false,
+      shift: e.shiftKey || false,
+      alt: e.altKey || false,
+      meta: e.metaKey || false
+    };
+  }
+
+  function handleKeydown(e){
+    const k = getKeyInfo(e);
+
+    const K = { F12: 123, U: 85, S: 83, I: 73, J: 74, C: 67, K: 75, P: 80, M: 77 };
+
+    const isF12 = (k.keyCode === K.F12) || k.key === 'f12' || k.code === 'f12';
+    const isCtrlU = (k.ctrl || k.meta) && (k.key === 'u' || k.keyCode === K.U);
+    const isCtrlS = (k.ctrl || k.meta) && (k.key === 's' || k.keyCode === K.S);
+    const isCtrlShiftI = (k.ctrl || k.meta) && k.shift && (k.key === 'i' || k.keyCode === K.I);
+    const isCtrlShiftJ = (k.ctrl || k.meta) && k.shift && (k.key === 'j' || k.keyCode === K.J);
+    const isCtrlShiftC = (k.ctrl || k.meta) && k.shift && (k.key === 'c' || k.keyCode === K.C);
+    const isCtrlShiftK = (k.ctrl || k.meta) && k.shift && (k.key === 'k' || k.keyCode === K.K);
+    const isCtrlShiftP = (k.ctrl || k.meta) && k.shift && (k.key === 'p' || k.keyCode === K.P);
+    const isCtrlShiftM = (k.ctrl || k.meta) && k.shift && (k.key === 'm' || k.keyCode === K.M);
+
+    if(isF12 || isCtrlU || isCtrlS || isCtrlShiftI || isCtrlShiftJ || isCtrlShiftC || isCtrlShiftK || isCtrlShiftP || isCtrlShiftM){
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+
+    if(k.keyCode === 93 || k.key === 'contextmenu' || k.code === 'contextmenu'){
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  }
+
+  document.addEventListener('keydown', handleKeydown, true);
+
+  document.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+  }, true);
+
+
+  function detectByWindowSize(){
+    try{
+      const wDiff = Math.abs((window.outerWidth || 0) - (window.innerWidth || 0));
+      const hDiff = Math.abs((window.outerHeight || 0) - (window.innerHeight || 0));
+      return (wDiff > threshold) || (hDiff > threshold);
+    }catch(e){
+      return false;
+    }
+  }
+
+  const _detector = new Image();
+  Object.defineProperty(_detector, 'id', {
+    get: function(){
+      try{ createOverlay(); devtoolsOpen = true; }catch(e){}
+      return 'detector';
+    }
+  });
+
+  function checkDevTools(){
+    let detected = false;
+    if(detectByWindowSize()) detected = true;
+    try{ console.log(_detector); }catch(e){}
+    if(detected && !devtoolsOpen){
+      devtoolsOpen = true;
+      createOverlay();
+      console.warn('DevTools detected — overlay enabled.');
+    } else if(!detected && devtoolsOpen){
+      devtoolsOpen = false;
+      removeOverlay();
+    }
+  }
+
+  const intervalId = setInterval(checkDevTools, 1000);
+  window.addEventListener('resize', checkDevTools);
+
+  document.addEventListener('keydown', function(e){
+    const k = getKeyInfo(e);
+    if((k.ctrl || k.meta) && k.key === 'u'){ e.preventDefault(); e.stopPropagation(); return false; }
+  }, true);
+
+  try{ console.info('Page protections (silent) enabled.'); }catch(e){}
 
 </script>
 </body>
